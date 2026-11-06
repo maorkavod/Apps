@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>האפליקציות שלי</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1116;--card:#171b22;--line:#262c36;--text:#e9edf2;--muted:#8b95a5;--acc:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Heebo,system-ui,sans-serif}
+main{max-width:720px;margin:0 auto;padding:32px 18px 48px}
+h1{font-size:28px;font-weight:800;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+a.app{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;transition:border-color .15s,transform .15s}
+a.app:hover{border-color:var(--acc);transform:translateY(-2px)}
+.ic{font-size:30px;line-height:1}
+.t{font-weight:700;font-size:17px;margin:10px 0 4px}
+.d{color:var(--muted);font-size:14px;line-height:1.5}
+.empty{color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+  <h1>האפליקציות שלי</h1>
+  <p class="sub">אוסף כלים ואפליקציות קטנות.</p>
+  <div class="grid" id="grid"><p class="empty">טוען…</p></div>
+</main>
+<script>
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+fetch('apps.json',{cache:'no-store'}).then(r=>r.json()).then(list=>{
+  document.getElementById('grid').innerHTML=list.length?list.map(a=>`<a class="app" href="${esc(a.path)}"><div class="ic">${esc(a.icon||'📦')}</div><div class="t">${esc(a.title)}</div><div class="d">${esc(a.description)}</div></a>`).join(''):'<p class="empty">עדיין אין אפליקציות.</p>';
+}).catch(()=>{document.getElementById('grid').innerHTML='<p class="empty">לא הצלחתי לטעון את רשימת האפליקציות.</p>'});
+</script>
+</body>
+</html>
